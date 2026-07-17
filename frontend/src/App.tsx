@@ -66,7 +66,7 @@ function AppContent() {
       </aside>
 
       <section className="workspace">
-        {activeNav === "dashboard" && <Dashboard />}
+        {activeNav === "dashboard" && <Dashboard onCreateJob={() => setShowJobForm(true)} />}
         {activeNav !== "dashboard" && (
           <div className="placeholder-page" aria-label={`${activeNav} page`}>
             <p className="eyebrow">{activeNav}</p>
