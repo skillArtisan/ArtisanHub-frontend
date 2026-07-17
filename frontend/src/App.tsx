@@ -9,11 +9,23 @@ import {
 import { ToastProvider } from './components/ToastContext';
 import { ErrorBoundary } from './components/ErrorBoundary';
 import { Dashboard } from './components/dashboard/Dashboard';
+import { JobForm } from './components/JobForm';
 
 type NavItem = "dashboard" | "jobs" | "artisans" | "settlements" | "disputes";
 
 function AppContent() {
   const [activeNav, setActiveNav] = useState<NavItem>("dashboard");
+  const [showJobForm, setShowJobForm] = useState(false);
+
+  const handleCloseJobForm = () => {
+    setShowJobForm(false);
+  };
+
+  const handleJobSuccess = (jobId: string) => {
+    console.log('Job created successfully:', jobId);
+    // TODO: Refresh dashboard data or show success toast
+    setShowJobForm(false);
+  };
 
   return (
     <main className="shell">
