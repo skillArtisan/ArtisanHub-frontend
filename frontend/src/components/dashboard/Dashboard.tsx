@@ -26,7 +26,7 @@ function formatXLM(val: number): string {
   return `${val.toLocaleString("en-US", { maximumFractionDigits: 1 })} XLM`;
 }
 
-export const Dashboard: React.FC = () => {
+export const Dashboard: React.FC<{ onCreateJob?: () => void }> = ({ onCreateJob }) => {
   const { metrics, loading, error, lastUpdated, refresh, countdown } = useDashboard();
 
   return (
@@ -39,6 +39,12 @@ export const Dashboard: React.FC = () => {
         </div>
 
         <div className="dashboard__controls">
+          {onCreateJob && (
+            <button className="primary-action" onClick={onCreateJob} aria-label="Create new job">
+              New job
+            </button>
+          )}
+
           {metrics && (
             <HealthBadge status={metrics.healthStatus} />
           )}
