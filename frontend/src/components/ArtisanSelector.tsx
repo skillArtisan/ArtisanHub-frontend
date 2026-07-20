@@ -83,12 +83,12 @@ export function ArtisanSelector({ value, onChange, error, disabled = false }: Ar
       </label>
 
       <div className="artisan-selector">
-        <div className={`artisan-input-wrapper ${error ? 'error' : ''}`}>
-          <Search size={18} className="search-icon" />
+        <div className={`artisan-selector__search ${error ? 'form-input--error' : ''}`}>
+          <Search size={18} className="artisan-selector__search-icon" />
           <input
             id="artisan-selector"
             type="text"
-            className="artisan-search-input"
+            className="artisan-selector__search-input"
             placeholder="Search by name or public key"
             value={searchTerm}
             onChange={(e) => {
@@ -101,14 +101,14 @@ export function ArtisanSelector({ value, onChange, error, disabled = false }: Ar
         </div>
 
         {selectedArtisan && (
-          <div className="selected-artisan">
+          <div className="artisan-selector__selected">
             <UserCheck size={16} />
             <span>
               {selectedArtisan.name || 'Unverified Artisan'} ({selectedArtisan.publicKey})
             </span>
             <button
               type="button"
-              className="clear-selection"
+              className="artisan-selector__clear"
               onClick={() => {
                 onChange('');
                 setSearchTerm('');
@@ -122,8 +122,8 @@ export function ArtisanSelector({ value, onChange, error, disabled = false }: Ar
 
         {isOpen && !disabled && (
           <>
-            <div className="artisan-backdrop" onClick={() => setIsOpen(false)} />
-            <div className="artisan-dropdown">
+            <div className="artisan-selector__backdrop" onClick={() => setIsOpen(false)} />
+            <div className="artisan-selector__list">
               {filteredArtisans.length > 0 ? (
                 filteredArtisans.map((artisan) => (
                   <button
@@ -136,24 +136,24 @@ export function ArtisanSelector({ value, onChange, error, disabled = false }: Ar
                       setIsOpen(false);
                     }}
                   >
-                    <div className="artisan-info">
+                    <div className="artisan-selector__info">
                       <strong>
                         {artisan.name || 'Unverified'}
                         {artisan.verified && (
-                          <span className="verified-badge">
+                          <span className="artisan-selector__badge">
                             <UserCheck size={14} />
                           </span>
                         )}
                       </strong>
-                      <span className="artisan-key">{artisan.publicKey}</span>
-                      <span className="artisan-meta">
+                      <span className="artisan-selector__key">{artisan.publicKey}</span>
+                      <span className="artisan-selector__stats">
                         {artisan.trade} • {artisan.completedJobs} jobs
                       </span>
                     </div>
                   </button>
                 ))
               ) : (
-                <div className="no-results">No artisans found</div>
+                <div className="artisan-selector__empty">No artisans found</div>
               )}
             </div>
           </>
