@@ -37,7 +37,7 @@ export function FormInput({
         disabled={disabled}
         {...register}
       />
-      {helperText && !error && <p className="form-helper">{helperText}</p>}
+      {helperText && !error && <p className="form-helper-text">{helperText}</p>}
       {error && <p className="form-error">{error}</p>}
     </div>
   );

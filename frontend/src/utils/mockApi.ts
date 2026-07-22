@@ -68,7 +68,7 @@ function generateMockHash(): string {
  * Example of actual API call structure for future implementation
  */
 export async function createJobAPI(formData: JobFormData): Promise<CreateJobResponse> {
-  const response = await fetch(`${import.meta.env.VITE_API_URL}/api/jobs`, {
+  const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/jobs`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
