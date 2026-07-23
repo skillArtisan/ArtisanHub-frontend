@@ -52,7 +52,7 @@ export const JobsByStatusChart: React.FC<JobsByStatusProps> = ({ data }) => {
           ))}
         </Pie>
         <Tooltip
-          formatter={(value: unknown, name: unknown) => [value, name]}
+          formatter={(value: any, name: any) => [value, name]}
           contentStyle={{
             background: "#fff8e7",
             border: "2px solid #17211d",
@@ -107,7 +107,7 @@ export const CompletionTrendChart: React.FC<TrendProps> = ({ data }) => {
           width={36}
         />
         <Tooltip
-          formatter={(value: unknown) => [`${value}%`, "Completion Rate"]}
+          formatter={(value: any) => [`${value}%`, "Completion Rate"]}
           contentStyle={{
             background: "#fff8e7",
             border: "2px solid #17211d",
@@ -162,7 +162,7 @@ export const ArtisanEarningsChart: React.FC<EarningsProps> = ({ data }) => {
           width={44}
         />
         <Tooltip
-          formatter={(value: unknown) => [
+          formatter={(value: any) => [
             `${typeof value === "number" ? value.toLocaleString() : value} XLM`,
             "Earnings",
           ]}
