@@ -1,15 +1,11 @@
-import React from 'react';
+import React, { InputHTMLAttributes } from 'react';
 
-interface FormInputProps {
+interface FormInputProps extends InputHTMLAttributes<HTMLInputElement> {
   label: string;
-  name: string;
-  type?: 'text' | 'number' | 'email';
-  placeholder?: string;
+  name?: string;
   error?: string;
-  register: any;
-  required?: boolean;
+  register?: any;
   helperText?: string;
-  disabled?: boolean;
 }
 
 export function FormInput({
@@ -21,21 +17,25 @@ export function FormInput({
   register,
   required = false,
   helperText,
-  disabled = false
+  disabled = false,
+  ...rest
 }: FormInputProps) {
   return (
     <div className="form-field">
-      <label htmlFor={name} className="form-label">
+      <label htmlFor={name || rest.id} className="form-label">
         {label}
         {required && <span className="required-mark">*</span>}
       </label>
       <input
-        id={name}
+        id={name || rest.id}
+        name={name}
         type={type}
         className={`form-input ${error ? 'error' : ''}`}
         placeholder={placeholder}
         disabled={disabled}
+        required={required}
         {...register}
+        {...rest}
       />
       {helperText && !error && <p className="form-helper-text">{helperText}</p>}
       {error && <p className="form-error">{error}</p>}

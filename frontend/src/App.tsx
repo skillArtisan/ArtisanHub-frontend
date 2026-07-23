@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Routes, Route, Navigate, Outlet } from 'react-router-dom';
 import {
   BriefcaseBusiness,
   CircleDollarSign,
@@ -10,10 +11,30 @@ import { ToastProvider } from './components/ToastContext';
 import { ErrorBoundary } from './components/ErrorBoundary';
 import { Dashboard } from './components/dashboard/Dashboard';
 import { JobForm } from './components/JobForm';
+import { useAuth } from './components/auth/AuthContext';
+import { SessionTimeout } from './components/auth/SessionTimeout';
+
+// Auth Components (Will create these next)
+import { AuthLayout } from './components/auth/AuthLayout';
+import { Login } from './components/auth/Login';
+import { Register } from './components/auth/Register';
+import { ForgotPassword } from './components/auth/ForgotPassword';
+import { ResetPassword } from './components/auth/ResetPassword';
+import { EmailVerification } from './components/auth/EmailVerification';
 
 type NavItem = "dashboard" | "jobs" | "artisans" | "settlements" | "disputes";
 
-function AppContent() {
+// Protected Route Wrapper
+const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
+  const { isAuthenticated } = useAuth();
+  if (!isAuthenticated) {
+    return <Navigate to="/login" replace />;
+  }
+  return <>{children}</>;
+};
+
+// Main Authenticated Layout (extracted from former AppContent)
+function MainLayout() {
   const [activeNav, setActiveNav] = useState<NavItem>("dashboard");
   const [showJobForm, setShowJobForm] = useState(false);
 
@@ -29,6 +50,7 @@ function AppContent() {
 
   return (
     <main className="shell">
+      <SessionTimeout />
       <aside className="sidebar" aria-label="ArtisanHub navigation">
         <div className="brand-mark">
           <span>AH</span>
@@ -106,7 +128,29 @@ function App() {
   return (
     <ErrorBoundary>
       <ToastProvider>
-        <AppContent />
+        <Routes>
+          {/* Public Auth Routes */}
+          <Route element={<AuthLayout />}>
+            <Route path="/login" element={<Login />} />
+            <Route path="/register" element={<Register />} />
+            <Route path="/forgot-password" element={<ForgotPassword />} />
+            <Route path="/reset-password" element={<ResetPassword />} />
+            <Route path="/verify-email" element={<EmailVerification />} />
+          </Route>
+
+          {/* Protected Routes */}
+          <Route
+            path="/"
+            element={
+              <ProtectedRoute>
+                <MainLayout />
+              </ProtectedRoute>
+            }
+          />
+
+          {/* Catch all */}
+          <Route path="*" element={<Navigate to="/" replace />} />
+        </Routes>
       </ToastProvider>
     </ErrorBoundary>
   );
