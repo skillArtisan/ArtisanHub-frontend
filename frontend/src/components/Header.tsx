@@ -17,54 +17,59 @@ export const Header: React.FC<HeaderProps> = ({
   const isMobile = breakpoint === 'mobile';
 
   return (
-    <header className="header">
-      <div className="header-left">
-        {isMobile && (
-          <button
-            className="header-menu-button"
-            onClick={onMenuClick}
-            aria-label="Toggle menu"
-          >
-            <Menu size={24} />
-          </button>
-        )}
-        <div className="header-brand">
-          <div className="header-logo">
-            <span>OW</span>
-          </div>
-          <div className="header-brand-text">
-            <h1 className="header-title">ArtisanHub</h1>
+    <header className="bg-white border-b border-gray-200 shadow-sm sticky top-0 z-30">
+      <div className="max-w-full px-4 py-3 flex items-center justify-between gap-4">
+        {/* Left */}
+        <div className="flex items-center gap-3 flex-shrink-0">
+          {isMobile && (
+            <button
+              className="p-2 hover:bg-gray-100 rounded-lg transition text-gray-600"
+              onClick={onMenuClick}
+              aria-label="Toggle menu"
+            >
+              <Menu size={20} />
+            </button>
+          )}
+          <div className="flex items-center gap-2">
+            <div className="w-10 h-10 bg-gradient-to-br from-blue-600 to-blue-400 rounded-lg flex items-center justify-center text-white font-bold text-sm">
+              AH
+            </div>
             {!isMobile && (
-              <p className="header-subtitle">Trusted Escrow Platform</p>
+              <div>
+                <h1 className="font-bold text-gray-900 text-sm">ArtisanHub</h1>
+                <p className="text-xs text-gray-600">Trusted Escrow Platform</p>
+              </div>
             )}
           </div>
         </div>
-      </div>
 
-      {!isMobile && (
-        <div className="header-search">
-          <Search size={18} />
-          <input
-            type="text"
-            placeholder="Search jobs, artisans, transactions..."
-            className="header-search-input"
-          />
-        </div>
-      )}
-
-      <div className="header-right">
-        <button className="header-icon-button" aria-label="Notifications">
-          <Bell size={20} />
-          <span className="header-notification-badge">3</span>
-        </button>
-
-        <div className="header-user-profile">
-          <div className="header-user-avatar">
-            <User size={20} />
+        {/* Search - Desktop only */}
+        {!isMobile && (
+          <div className="flex-1 max-w-sm relative">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={16} />
+            <input
+              type="text"
+              placeholder="Search jobs, artisans..."
+              className="w-full pl-9 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-0 bg-gray-50 text-sm"
+            />
           </div>
-          <div className="header-user-info">
-            <p className="header-user-name">{userName}</p>
-            <p className="header-user-role">{userRole}</p>
+        )}
+
+        {/* Right */}
+        <div className="flex items-center gap-4">
+          <button className="relative p-2 hover:bg-gray-100 rounded-lg transition text-gray-600" aria-label="Notifications">
+            <Bell size={18} />
+            <span className="absolute top-1 right-1 w-2 h-2 bg-red-600 rounded-full" />
+          </button>
+
+          <div className="flex items-center gap-2 pl-4 border-l border-gray-200">
+            <div className="text-right hidden sm:block">
+              <p className="text-sm font-bold text-gray-900">{userName}</p>
+              <p className="text-xs text-gray-600">{userRole}</p>
+            </div>
+            <div className="w-9 h-9 bg-gradient-to-br from-blue-500 to-blue-400 rounded-full flex items-center justify-center text-white">
+              <User size={16} />
+            </div>
           </div>
         </div>
       </div>

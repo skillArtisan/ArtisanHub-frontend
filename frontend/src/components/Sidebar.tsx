@@ -7,7 +7,8 @@ import {
   Home,
   Settings,
   HelpCircle,
-  LogOut
+  LogOut,
+  X
 } from 'lucide-react';
 import { useBreakpoint } from '../hooks/useBreakpoint';
 
@@ -104,83 +105,98 @@ export const Sidebar: React.FC<SidebarProps> = ({
   return (
     <>
       {isMobile && isOpen && (
-        <div className="sidebar-overlay" onClick={onClose} />
+        <div className="fixed inset-0 bg-black/50 z-30" onClick={onClose} />
       )}
-      <aside className={`sidebar ${isMobile && isOpen ? 'sidebar-open' : ''}`}>
-        <div className="sidebar-header">
-          <div className="sidebar-brand">
-            <div className="sidebar-logo">
-              <span>OW</span>
-            </div>
-            {!isMobile && (
-              <div className="sidebar-brand-text">
-                <h2 className="sidebar-title">ArtisanHub</h2>
-                <p className="sidebar-subtitle">{userRole} Portal</p>
+      <aside className={`${
+        isMobile 
+          ? `fixed left-0 top-0 h-full w-64 z-40 transform transition-transform ${isOpen ? 'translate-x-0' : '-translate-x-full'}` 
+          : 'w-64'
+      } bg-white border-r border-gray-200 flex flex-col`}>
+        {/* Header */}
+        <div className="p-4 border-b border-gray-200">
+          <div className="flex items-center justify-between gap-2">
+            <div className="flex items-center gap-2">
+              <div className="w-10 h-10 bg-gradient-to-br from-blue-600 to-blue-400 rounded-lg flex items-center justify-center text-white font-bold text-sm">
+                AH
               </div>
+              {!isMobile && (
+                <div>
+                  <h2 className="font-bold text-gray-900 text-sm">ArtisanHub</h2>
+                  <p className="text-xs text-gray-600">{userRole} Portal</p>
+                </div>
+              )}
+            </div>
+            {isMobile && (
+              <button
+                className="p-2 hover:bg-gray-100 rounded-lg transition text-gray-600"
+                onClick={onClose}
+                aria-label="Close menu"
+              >
+                <X size={18} />
+              </button>
             )}
           </div>
-          {isMobile && (
-            <button
-              className="sidebar-close-button"
-              onClick={onClose}
-              aria-label="Close menu"
-            >
-              ×
-            </button>
-          )}
         </div>
 
-        <nav className="sidebar-nav" aria-label="Main navigation">
-          <div className="sidebar-nav-section">
-            {filteredNavItems.map((item) => {
-              const Icon = item.icon;
-              const isActive = activeItem === item.id;
+        {/* Navigation */}
+        <nav className="flex-1 overflow-y-auto p-3 space-y-1" aria-label="Main navigation">
+          {/* Main Items */}
+          {filteredNavItems.map((item) => {
+            const Icon = item.icon;
+            const isActive = activeItem === item.id;
 
-              return (
-                <button
-                  key={item.id}
-                  className={`sidebar-nav-item ${isActive ? 'sidebar-nav-item-active' : ''}`}
-                  onClick={() => handleItemClick(item.id)}
-                  aria-current={isActive ? 'page' : undefined}
-                >
-                  <Icon size={20} />
-                  {!isMobile && <span>{item.label}</span>}
-                  {isActive && <span className="sidebar-active-indicator" />}
-                </button>
-              );
-            })}
-          </div>
+            return (
+              <button
+                key={item.id}
+                className={`w-full flex items-center gap-3 px-4 py-2.5 rounded-lg font-medium transition ${
+                  isActive
+                    ? 'bg-gradient-to-r from-blue-600 to-blue-500 text-white shadow-md'
+                    : 'text-gray-700 hover:bg-gray-100'
+                }`}
+                onClick={() => handleItemClick(item.id)}
+                aria-current={isActive ? 'page' : undefined}
+              >
+                <Icon size={18} />
+                {!isMobile && <span className="text-sm">{item.label}</span>}
+              </button>
+            );
+          })}
 
-          <div className="sidebar-nav-section sidebar-nav-section-bottom">
-            {filteredBottomItems.map((item) => {
-              const Icon = item.icon;
+          {/* Divider */}
+          <div className="my-2 h-px bg-gray-200" />
 
-              return (
-                <button
-                  key={item.id}
-                  className="sidebar-nav-item"
-                  onClick={() => handleItemClick(item.id)}
-                >
-                  <Icon size={20} />
-                  {!isMobile && <span>{item.label}</span>}
-                </button>
-              );
-            })}
-            <button
-              className="sidebar-nav-item sidebar-nav-item-logout"
-              onClick={() => handleItemClick('logout')}
-            >
-              <LogOut size={20} />
-              {!isMobile && <span>Logout</span>}
-            </button>
-          </div>
+          {/* Bottom Items */}
+          {filteredBottomItems.map((item) => {
+            const Icon = item.icon;
+
+            return (
+              <button
+                key={item.id}
+                className="w-full flex items-center gap-3 px-4 py-2.5 rounded-lg font-medium text-gray-700 hover:bg-gray-100 transition"
+                onClick={() => handleItemClick(item.id)}
+              >
+                <Icon size={18} />
+                {!isMobile && <span className="text-sm">{item.label}</span>}
+              </button>
+            );
+          })}
+
+          {/* Logout */}
+          <button
+            className="w-full flex items-center gap-3 px-4 py-2.5 rounded-lg font-medium text-red-600 hover:bg-red-50 transition"
+            onClick={() => handleItemClick('logout')}
+          >
+            <LogOut size={18} />
+            {!isMobile && <span className="text-sm">Logout</span>}
+          </button>
         </nav>
 
+        {/* Footer - Desktop only */}
         {!isMobile && (
-          <div className="sidebar-footer">
-            <div className="sidebar-role-badge">
-              <span className="sidebar-role-indicator" />
-              <span>{userRole}</span>
+          <div className="p-3 border-t border-gray-200">
+            <div className="flex items-center gap-2 px-4 py-2 bg-blue-50 rounded-lg border border-blue-200">
+              <div className="w-2 h-2 bg-blue-600 rounded-full" />
+              <span className="text-xs font-bold text-blue-900">{userRole}</span>
             </div>
           </div>
         )}

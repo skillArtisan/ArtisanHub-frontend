@@ -34,7 +34,7 @@ export const Layout: React.FC<LayoutProps> = ({
   };
 
   return (
-    <div className="layout">
+    <div className="min-h-screen bg-gray-50 flex flex-col">
       {isMobile && (
         <Header
           onMenuClick={handleMenuClick}
@@ -43,36 +43,47 @@ export const Layout: React.FC<LayoutProps> = ({
         />
       )}
 
-      <div className="layout-body">
-        <Sidebar
-          isOpen={sidebarOpen}
-          onClose={handleCloseSidebar}
-          userRole={userRole}
-          activeItem={activeNavItem}
-          onNavigate={(item) => {
-            onNavigate?.(item);
-            if (isMobile) {
-              setSidebarOpen(false);
-            }
-          }}
-        />
+      <div className="flex flex-1 overflow-hidden">
+        {/* Sidebar - Always visible on desktop */}
+        {!isMobile && (
+          <Sidebar
+            isOpen={true}
+            onClose={handleCloseSidebar}
+            userRole={userRole}
+            activeItem={activeNavItem}
+            onNavigate={(item) => {
+              onNavigate?.(item);
+            }}
+          />
+        )}
 
-        <main className="layout-main">
+        {/* Sidebar - Mobile */}
+        {isMobile && (
+          <Sidebar
+            isOpen={sidebarOpen}
+            onClose={handleCloseSidebar}
+            userRole={userRole}
+            activeItem={activeNavItem}
+            onNavigate={(item) => {
+              onNavigate?.(item);
+              setSidebarOpen(false);
+            }}
+          />
+        )}
+
+        {/* Main Content */}
+        <main className="flex-1 flex flex-col overflow-hidden">
           {!isMobile && (
             <Header
               userRole={userRole}
               userName={userName}
             />
           )}
-          <div className="layout-content">
+          <div className="flex-1 overflow-auto">
             {children}
           </div>
         </main>
       </div>
-
-      {isMobile && sidebarOpen && (
-        <div className="mobile-sidebar-backdrop" onClick={handleCloseSidebar} />
-      )}
     </div>
   );
 };
