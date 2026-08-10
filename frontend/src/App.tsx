@@ -14,6 +14,7 @@ import { ForgotPassword } from './components/auth/ForgotPassword';
 import { ResetPassword } from './components/auth/ResetPassword';
 import { EmailVerification } from './components/auth/EmailVerification';
 import { Home } from './pages/Home';
+import { Artisans } from './pages/Artisans';
 
 type NavItem = "dashboard" | "jobs" | "artisans" | "settlements" | "disputes";
 
@@ -91,10 +92,29 @@ function MainLayout() {
 
       <section className="workspace bg-gradient-to-b from-blue-50 to-white">
         {activeNav === "dashboard" && <Dashboard onCreateJob={() => setShowJobForm(true)} />}
-        {activeNav !== "dashboard" && (
-          <div className="placeholder-page" aria-label={`${activeNav} page`}>
+        {activeNav === "artisans" && <Artisans />}
+        {activeNav === "jobs" && (
+          <div className="placeholder-page" aria-label="jobs page">
             <p className="eyebrow text-blue-600">section</p>
-            <h1 className="text-gray-900">{activeNav}</h1>
+            <h1 className="text-gray-900">jobs</h1>
+            <p style={{ color: "#64748B", marginTop: "12px" }} className="text-gray-600">
+              This section is under construction.
+            </p>
+          </div>
+        )}
+        {activeNav === "settlements" && (
+          <div className="placeholder-page" aria-label="settlements page">
+            <p className="eyebrow text-blue-600">section</p>
+            <h1 className="text-gray-900">settlements</h1>
+            <p style={{ color: "#64748B", marginTop: "12px" }} className="text-gray-600">
+              This section is under construction.
+            </p>
+          </div>
+        )}
+        {activeNav === "disputes" && (
+          <div className="placeholder-page" aria-label="disputes page">
+            <p className="eyebrow text-blue-600">section</p>
+            <h1 className="text-gray-900">disputes</h1>
             <p style={{ color: "#64748B", marginTop: "12px" }} className="text-gray-600">
               This section is under construction.
             </p>
