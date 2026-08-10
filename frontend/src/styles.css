@@ -1,19 +1,20 @@
 @import url("https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@500;600;700;800&family=Newsreader:opsz,wght@6..72,500;6..72,700&display=swap");
+@import url('./design-system.css');
 
 :root {
   color-scheme: light;
-  --paper: #f7f1df;
-  --paper-strong: #fff8e7;
-  --ink: #17211d;
-  --muted: #667069;
-  --line: #202820;
-  --green: #0f8f5f;
-  --green-deep: #075940;
-  --cobalt: #3159ff;
-  --orange: #ff6b27;
-  --rose: #c6415d;
-  --yellow: #f4bd2f;
-  --shadow: 10px 10px 0 #17211d;
+  --paper: #F8FAFC;
+  --paper-strong: #FFFFFF;
+  --ink: #0F172A;
+  --muted: #64748B;
+  --line: #E2E8F0;
+  --green: #2563EB;
+  --green-deep: #1D4ED8;
+  --cobalt: #3B82F6;
+  --orange: #FF6B27;
+  --rose: #EF4444;
+  --yellow: #F59E0B;
+  --shadow: 0 10px 15px -3px rgba(37, 99, 235, 0.15), 0 4px 6px -2px rgba(37, 99, 235, 0.1);
   font-family: "Bricolage Grotesque", "Trebuchet MS", sans-serif;
   background: var(--paper);
   color: var(--ink);
