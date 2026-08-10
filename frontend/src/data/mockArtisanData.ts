@@ -30,6 +30,39 @@ export interface DisputeRecord {
   summary: string;
 }
 
+export interface ServiceCategory {
+  id: string;
+  name: string;
+  description: string;
+  basePrice?: number;
+  icon?: string;
+}
+
+export interface TimeSlot {
+  day: string;
+  startTime: string;
+  endTime: string;
+}
+
+export interface BusinessHours {
+  monday: TimeSlot | null;
+  tuesday: TimeSlot | null;
+  wednesday: TimeSlot | null;
+  thursday: TimeSlot | null;
+  friday: TimeSlot | null;
+  saturday: TimeSlot | null;
+  sunday: TimeSlot | null;
+}
+
+export interface PortfolioItem {
+  id: string;
+  title: string;
+  description: string;
+  imageUrl: string;
+  category: TradeSpecialization;
+  completedDate: string;
+}
+
 export interface Artisan {
   id: string;
   name: string;
@@ -38,6 +71,7 @@ export interface Artisan {
   joinDate: string;
   avatarInitials: string;
   avatarColor: string;
+  profilePictureUrl?: string;
   isVerified: boolean;
   totalJobs: number;
   completedJobs: number;
@@ -47,6 +81,10 @@ export interface Artisan {
   disputes: DisputeRecord[];
   bio: string;
   location: string;
+  serviceCategories: ServiceCategory[];
+  portfolioItems: PortfolioItem[];
+  businessHours: BusinessHours;
+  availabilityCalendar: string[]; // Array of available dates (YYYY-MM-DD)
 }
 
 export const mockArtisans: Artisan[] = [
