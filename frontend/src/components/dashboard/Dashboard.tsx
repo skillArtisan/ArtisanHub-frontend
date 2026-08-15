@@ -22,6 +22,7 @@ import {
   ArtisanEarningsChart,
 } from "./Charts";
 import { MetricPanelSkeleton } from "../Skeleton";
+import { ErrorMessage } from "../ErrorMessage";
 
 function formatXLM(val: number): string {
   if (val >= 1_000_000) return `${(val / 1_000_000).toFixed(2)}M XLM`;
@@ -72,12 +73,13 @@ export const Dashboard: React.FC<{ onCreateJob?: () => void }> = ({ onCreateJob 
 
       {/* ── Error banner ───────────────────────────────────────────────── */}
       {error && (
-        <div className="mx-auto max-w-7xl px-4 py-3 mt-4 bg-red-50 border border-red-200 rounded-lg flex items-center gap-2" role="alert">
-          <AlertTriangle size={18} className="text-red-600 flex-shrink-0" />
-          <p className="text-sm text-red-700 font-medium">{error}</p>
-          <button className="ml-auto text-sm text-red-600 font-bold hover:text-red-700" onClick={refresh}>
-            Retry
-          </button>
+        <div className="mx-auto max-w-7xl px-4 mt-4">
+          <ErrorMessage
+            severity="error"
+            title="Failed to load dashboard"
+            message={error}
+            onRetry={refresh}
+          />
         </div>
       )}
 

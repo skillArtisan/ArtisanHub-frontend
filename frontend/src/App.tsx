@@ -15,6 +15,11 @@ import { ResetPassword } from './components/auth/ResetPassword';
 import { EmailVerification } from './components/auth/EmailVerification';
 import { Home } from './pages/Home';
 import { Artisans } from './pages/Artisans';
+import { NotFound } from './pages/NotFound';
+import { OfflineBanner } from './components/OfflineBanner';
+import { useOfflineDetection } from './hooks/useOfflineDetection';
+import { useDarkMode } from './hooks/useDarkMode';
+import { ThemeToggle } from './components/ThemeToggle';
 
 type NavItem = "dashboard" | "jobs" | "artisans" | "settlements" | "disputes";
 
@@ -29,6 +34,8 @@ const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
 function MainLayout() {
   const [activeNav, setActiveNav] = useState<NavItem>("dashboard");
   const [showJobForm, setShowJobForm] = useState(false);
+  const { isOnline, wasOffline } = useOfflineDetection();
+  const { theme, toggleTheme } = useDarkMode();
 
   const handleCloseJobForm = () => {
     setShowJobForm(false);
@@ -42,6 +49,7 @@ function MainLayout() {
   return (
     <main className="shell">
       <SessionTimeout />
+      <OfflineBanner isOnline={isOnline} wasOffline={wasOffline} />
       <aside className="sidebar bg-gradient-to-b from-blue-900 to-blue-800 shadow-lg" aria-label="ArtisanHub navigation">
         <div className="brand-mark bg-gradient-to-br from-blue-600 to-blue-400 border-2 border-blue-300">
           <span className="text-white font-bold">AH</span>
@@ -88,6 +96,9 @@ function MainLayout() {
             <Gavel size={20} />
           </button>
         </nav>
+        <div className="sidebar-theme-toggle">
+          <ThemeToggle theme={theme} onToggle={toggleTheme} />
+        </div>
       </aside>
 
       <section className="workspace bg-gradient-to-b from-blue-50 to-white">
@@ -157,7 +168,7 @@ function App() {
             }
           />
 
-          <Route path="*" element={<Navigate to="/" replace />} />
+          <Route path="*" element={<NotFound />} />
         </Routes>
       </ToastProvider>
     </ErrorBoundary>
