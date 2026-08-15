@@ -2,11 +2,14 @@ import React, { createContext, useContext, useState, useCallback, ReactNode } fr
 import { X, CheckCircle, AlertCircle, AlertTriangle, Loader2 } from 'lucide-react';
 
 export type ToastType = 'success' | 'error' | 'warning' | 'info';
+export type ToastPosition = 'top-right' | 'top-left' | 'bottom-right' | 'bottom-left' | 'top-center' | 'bottom-center';
 
 export interface Toast {
   id: string;
   type: ToastType;
   message: string;
+  title?: string;
+  duration?: number;
   onRetry?: () => void;
 }
 
@@ -14,12 +17,15 @@ interface ToastContextType {
   toasts: Toast[];
   addToast: (toast: Omit<Toast, 'id'>) => void;
   removeToast: (id: string) => void;
+  position: ToastPosition;
+  setPosition: (position: ToastPosition) => void;
 }
 
 const ToastContext = createContext<ToastContextType | undefined>(undefined);
 
 export const ToastProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [toasts, setToasts] = useState<Toast[]>([]);
+  const [position, setPosition] = useState<ToastPosition>('bottom-right');
 
   const addToast = useCallback((toast: Omit<Toast, 'id'>) => {
     const id = Math.random().toString(36).substring(2, 9);
@@ -31,9 +37,9 @@ export const ToastProvider: React.FC<{ children: ReactNode }> = ({ children }) =
   }, []);
 
   return (
-    <ToastContext.Provider value={{ toasts, addToast, removeToast }}>
+    <ToastContext.Provider value={{ toasts, addToast, removeToast, position, setPosition }}>
       {children}
-      <ToastContainer toasts={toasts} removeToast={removeToast} />
+      <ToastContainer toasts={toasts} removeToast={removeToast} position={position} />
     </ToastContext.Provider>
   );
 };
@@ -46,9 +52,13 @@ export const useToast = () => {
   return context;
 };
 
-const ToastContainer: React.FC<{ toasts: Toast[]; removeToast: (id: string) => void }> = ({ toasts, removeToast }) => {
+const ToastContainer: React.FC<{ 
+  toasts: Toast[]; 
+  removeToast: (id: string) => void;
+  position: ToastPosition;
+}> = ({ toasts, removeToast, position }) => {
   return (
-    <div className="toast-container">
+    <div className={`toast-container toast-container--${position}`}>
       {toasts.map((toast) => (
         <ToastComponent key={toast.id} toast={toast} onClose={() => removeToast(toast.id)} />
       ))}
@@ -58,9 +68,10 @@ const ToastContainer: React.FC<{ toasts: Toast[]; removeToast: (id: string) => v
 
 const ToastComponent: React.FC<{ toast: Toast; onClose: () => void }> = ({ toast, onClose }) => {
   React.useEffect(() => {
-    const timer = setTimeout(onClose, 5000);
+    const duration = toast.duration ?? 5000;
+    const timer = setTimeout(onClose, duration);
     return () => clearTimeout(timer);
-  }, [onClose]);
+  }, [onClose, toast.duration]);
 
   const getIcon = () => {
     switch (toast.type) {
@@ -76,9 +87,10 @@ const ToastComponent: React.FC<{ toast: Toast; onClose: () => void }> = ({ toast
   };
 
   return (
-    <div className={`toast ${toast.type}`}>
+    <div className={`toast toast--${toast.type}`} role="alert" aria-live="polite">
       {getIcon()}
       <div className="toast-content">
+        {toast.title && <p className="toast-title">{toast.title}</p>}
         <p className="toast-message">{toast.message}</p>
         {toast.onRetry && (
           <button className="toast-retry" onClick={toast.onRetry}>
@@ -87,7 +99,7 @@ const ToastComponent: React.FC<{ toast: Toast; onClose: () => void }> = ({ toast
           </button>
         )}
       </div>
-      <button className="toast-close" onClick={onClose} aria-label="Close toast">
+      <button className="toast-close" onClick={onClose} aria-label="Close notification">
         <X size={18} />
       </button>
     </div>

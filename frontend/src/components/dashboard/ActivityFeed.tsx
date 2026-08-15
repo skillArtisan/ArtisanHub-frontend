@@ -1,6 +1,7 @@
 import React from "react";
 import { ArrowRight } from "lucide-react";
 import { ActivityEvent, JobState } from "../../data/mockDashboard";
+import { EmptyActivity } from "../EmptyState";
 
 const statePillClass: Record<JobState, string> = {
   Open: "state-pill state-open",
@@ -34,11 +35,7 @@ export const ActivityFeed: React.FC<Props> = ({ events, loading }) => {
   }
 
   if (events.length === 0) {
-    return (
-      <div className="activity-feed activity-feed--empty" aria-label="No recent activity">
-        <p className="empty-state__text">No state changes yet — jobs will appear here as they move through escrow.</p>
-      </div>
-    );
+    return <EmptyActivity />;
   }
 
   return (
